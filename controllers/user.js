@@ -41,6 +41,8 @@ exports.login = async (req, res) => {
   if (userData) {
     let isMatched = bcrypt.compareSync(req.body.password, userData.password);
     if (isMatched) {
+      let { token } = await User.generateAuthToken(req.body.email);
+      userData.token = token;
       delete userData.password;
       res.json(Response.parse(false, userData));
     } else {

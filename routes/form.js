@@ -1,4 +1,5 @@
 var express = require("express");
+const auth = require("../auth/auth");
 var router = express.Router();
 const UploadService = require("../services/uploadService");
 let multer = require("multer");
