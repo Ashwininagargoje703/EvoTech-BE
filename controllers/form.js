@@ -46,7 +46,7 @@ exports.updateForm = async (req, res) => {
   try {
     let formId = req.body.formId;
 
-    if (!formId) res.json(Response.parse(false, "formId is missing..."));
+    if (!formId) return res.json(Response.parse(false, "formId is missing..."));
 
     let updateObj = {};
 
@@ -65,9 +65,7 @@ exports.updateForm = async (req, res) => {
 exports.deleteForm = async (req, res) => {
   try {
     let formId = req.body.formId;
-
-    if (!formId) res.json(Response.parse(false, "formId is missing..."));
-
+    if (!formId) return res.json(Response.parse(false, "formId is missing..."));
     let f = await Form.findByIdAndDelete(ObjectId(formId));
     res.json(Response.parse(false, f));
   } catch (error) {

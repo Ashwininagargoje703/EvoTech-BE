@@ -12,15 +12,18 @@ const upload = multer({
 });
 
 router.post("/upload-image", upload.single("image"), async (req, res) => {
-  const file = req.file;
-  await UploadService.uploadFile(file, (err, data) => {
-    if (err) return res.send({ success: false, message: "upload failed" });
-    return res.send({ success: true, data: data });
-  });
+  try {
+    const file = req.file;
+    await UploadService.uploadFile(file, (err, data) => {
+      if (err) return res.send({ success: false, message: "upload failed" });
+      return res.send({ success: true, data: data });
+    });
+  } catch (error) {
+    return res.send({ success: false, message: "error getting link" });
+  }
 });
 
 router.post("/submitFrom", fromController.submitForm);
-// router.post("/getAllForm", fromController.getAllForm);
 router.get("/getAllForm", fromController.getAllForm);
 
 router.post("/updateForm", fromController.updateForm);
