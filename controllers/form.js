@@ -33,12 +33,44 @@ exports.submitForm = async (req, res) => {
 
 exports.getAllForm = async (req, res) => {
   try {
-    let userId = req.body.userId;
-
-    if (!userId) res.json(Response.parse(false, "userId is missing..."));
+    let userId = req.query.userId;
+    if (!userId) return res.json(Response.parse(false, "userId is missing"));
 
     let data = await from.find({ userId: ObjectId(userId) });
-    res.json(Response.parse(false, data));
+    return res.json(Response.parse(true, data));
+  } catch (error) {
+    return res.json(Response.parse(false, error.message));
+  }
+};
+
+exports.updateForm = async (req, res) => {
+  try {
+    let formId = req.body.formId;
+
+    if (!formId) res.json(Response.parse(false, "formId is missing..."));
+
+    let updateObj = {};
+
+    if (req.body.imageUrl) updateObj.imageUrl = req.body.imageUrl;
+    if (req.body.title) updateObj.title = req.body.title;
+    if (req.body.description) updateObj.description = req.body.description;
+
+    console.log(updateObj, formId);
+    await Form.updateOne({ _id: ObjectId(formId) }, { $set: updateObj });
+    res.json(Response.parse(false, "updated Successfully"));
+  } catch (error) {
+    res.json(Response.parse(false, error.message));
+  }
+};
+
+exports.deleteForm = async (req, res) => {
+  try {
+    let formId = req.body.formId;
+
+    if (!formId) res.json(Response.parse(false, "formId is missing..."));
+
+    let f = await Form.findByIdAndDelete(ObjectId(formId));
+    res.json(Response.parse(false, f));
   } catch (error) {
     res.json(Response.parse(false, error.message));
   }
