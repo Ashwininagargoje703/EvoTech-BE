@@ -35,8 +35,7 @@ exports.getAllForm = async (req, res) => {
   try {
     let userId = req.query.userId;
     if (!userId) return res.json(Response.parse(false, "userId is missing"));
-
-    let data = await from.find({ userId: ObjectId(userId) });
+    let data = await Form.find({ userId: ObjectId(userId) });
     return res.json(Response.parse(true, data));
   } catch (error) {
     return res.json(Response.parse(false, error.message));
